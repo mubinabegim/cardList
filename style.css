@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    transition: all .2s ease-in;
+    font-family: "Montserrat", sans-serif;
+}
+  
+  body {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.219), rgba(0, 0, 0, 0.219)), url('./assets/images/todosBg.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 2rem;
+}
+
+ .container {
+   max-width: 40rem;
+   padding: 2rem 1rem;
+ } 
+ @media screen and (max-width:500px) {
+    .wrapper{
+      grid-template-columns: 1fr !important;
+    } 
+ }
+
+ .card{
+   background-color: white;
+   border-radius: .3rem;
+ }
+
+ .card div {
+   padding: .8rem;
+ }
+
+ .card-header{
+   display: flex;
+ }
+
+ .card-header input,
+ .card-header button{
+    width: 100%;
+    border: 1px solid #0D59AA;
+    border-radius: .3rem 0 0 .3rem;
+    padding: .5rem;
+    outline-color: #0D59AA;
+ }
+
+ .card p{
+  border-radius: .3rem;
+}
+
+ .card-header button {
+   width: 25%;
+   border-radius: 0 .3rem .3rem 0;
+   background-color: #0D59AA;
+   border: 1px solid #0D59AA;
+   color: white;
+ }
+
+ .card-body ul {
+   list-style: none;
+   border-bottom: 1px solid #0a407a52;
+  }
+  
+  .card-body ul li{
+    border: 1px solid #467cb652;
+    border-radius: .3rem;
+    /* border-bottom: none; */
+    padding: .5rem;
+    margin: .8rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+  .card-body ul li:hover{
+    background-color:#295e9752;
+  }
+  .card-body ul li span i:last-child {
+    color: crimson;
+   margin-left: .3rem;
+ }
+
+ .card-body ul li span i:nth-child(1) {
+   color: #0a417ace;
+ }
