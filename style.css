@@ -69,7 +69,7 @@
    border-bottom: 1px solid #0a407a52;
   }
   
-  ul li{
+  li{
     border: 1px solid #467cb652;
     border-radius: .3rem;
     /* border-bottom: none; */
@@ -80,17 +80,17 @@
     align-items: center;
     cursor: pointer;
   }
-  ul li:hover{
+   li:hover{
     background-color:#295e9752;
   }
-  ul li span i:last-child {
+  li span i:last-child {
     color: crimson;
    margin-left: .3rem;
  }
 
- ul li span i:nth-child(1) {
+  li span i:nth-child(1) {
    color: #0a417ace;
  }
- .dragging{
+ /* .dragging{
   opacity: .5;
-}
+} */
