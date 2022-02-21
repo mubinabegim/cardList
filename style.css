@@ -24,7 +24,7 @@
    max-width: 40rem;
    padding: 2rem 1rem;
  } 
- @media screen and (max-width:500px) {
+ @media screen and (max-width:765px) {
     .wrapper{
       grid-template-columns: 1fr !important;
     } 
@@ -91,3 +91,6 @@
  .card-body ul li span i:nth-child(1) {
    color: #0a417ace;
  }
+ .dragging{
+  opacity: .5;
+}

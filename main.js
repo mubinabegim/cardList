@@ -10,32 +10,34 @@ let todos2 = [],
 // constants
 const form1 = document.querySelector("#form1"),
     form2 = document.querySelector("#form2"),
-    form3 = document.querySelector("#form3");
-    todos_ul1 = document.querySelector("#ul1"),
-    todos_ul2 = document.querySelector("#ul2"),
-    todos_ul3 = document.querySelector("#ul3"),
+    form3 = document.querySelector("#form3"),
+    
     inputs = document.querySelectorAll("input"),
     spans = document.querySelectorAll(".spanBtn"),
-    buttons = document.querySelectorAll("button");
+    buttons = document.querySelectorAll("button"),
+    draggables = document.querySelectorAll(".draggable"),
+    cardBodys = document.querySelectorAll(".card-body"),
+    uls = document.querySelectorAll("ul");
 
 // writeToDos1
 const WriteTodos1 = () => {
-    todos_ul1.innerHTML = "";
+    uls[0].innerHTML = "";
     todos.map((todo, index) => {
-        todos_ul1.innerHTML += `<li>
+        uls[0].innerHTML += `<li class="draggable" draggable="true">
         <span>${index + 1}. ${todo.title}</span>
         <span style="display:flex;">
             <i onclick="EditToDo1(${todo.id})" class="btn bi bi-pencil-square"></i>
-            <i onclick="DeleteToDo1(${todo.id})" class="bi bi-trash"></i>
+            <i onclick="DeleteToDo1(${todo.id})" class="btn bi bi-trash"></i>
         </span>
     </li>`
     })
 }
+
 // WriteTodos2
 const WriteTodos2 = () => {
-    todos_ul2.innerHTML = "";
+    uls[1].innerHTML = "";
     todos2.map((todo, index) => {
-        todos_ul2.innerHTML += `<li>
+        uls[1].innerHTML += `<li class="draggable" draggable="true">
         <span>${index + 1}. ${todo.title}</span>
         <span style="display:flex;">
             <i onclick="EditToDo2(${todo.id})" class="btn bi bi-pencil-square"></i>
@@ -47,9 +49,9 @@ const WriteTodos2 = () => {
 // WriteTodos3
 const WriteTodos3 = () => {
 
-    todos_ul3.innerHTML = "";
+    uls[2].innerHTML = "";
     todos3.map((todo, index) => {
-        todos_ul3.innerHTML += `<li>
+        uls[2].innerHTML += `<li class="draggable" draggable="true">
         <span>${index + 1}. ${todo.title}</span>
         <span style="display:flex;">
             <i onclick="EditToDo3(${todo.id})" class="btn bi bi-pencil-square"></i>
@@ -85,10 +87,10 @@ form1.onsubmit = (e) => {
             inputs[0].style.fontWeight="normal";
             buttons[0].innerHTML = `
                 <i class="bi bi-plus"></i>
-                <span> Edit</span>`
+                <span> Create</span>`
         };
 
-    } else alert("Fill all the gaps")
+    } else alert("Fill  the gaps")
 };
 // create via form2
 form2.onsubmit = (e) => {
@@ -117,10 +119,10 @@ form2.onsubmit = (e) => {
             inputs[1].style.fontWeight="normal";
             buttons[1].innerHTML = `
                 <i class="bi bi-plus"></i>
-                <span> Edit</span>`
+                <span> Create</span>`
         }
 
-    } else alert("Fill all the gaps")
+    } else alert("Fill  the gaps")
 }
 
 // create via form3
@@ -150,9 +152,9 @@ form3.onsubmit = (e) => {
             inputs[2].style.fontWeight="normal"
             buttons[2].innerHTML = `
                 <i class="bi bi-plus"></i>
-                <span> Edit</span>`
+                <span> Create</span>`
         }
-    } else alert("Fill all the gaps")
+    } else alert("Fill  the gaps")
 }
 
 const DeleteToDo1 = (id) => {
@@ -222,5 +224,41 @@ const EditToDo3 = (id) => {
             inputs[2].value = todo.title;
         }
     })
+}
+// Drag and drop
+draggables.forEach(draggable =>{
+    draggable.addEventListener("dragstart", () => {
+        // console.log('drag start')
+        draggable.classList.add("dragging")
+    })
+    draggable.addEventListener("dragend", ()=>{
+        draggable.classList.remove("dragging")
+    })
+})
+uls.forEach(ul=>{
+    ul.addEventListener("dragover", e => {
+        e.preventDefault()
+        const afterElement = getDragAfterElement(ul, e.clientY)
+        // console.log("drag over")
+        const draggable = document.querySelector(".dragging");
+        if(afterElement === null){
+            ul.appendChild(draggables)
+    }else{
+        ul.insertBefore(draggable, afterElement)
+    }
+    })
+})
+const getDragAfterElement = (ul, y) =>{
+    const draggableElements = [...ul.querySelectorAll(".draggable:not(.dragging)")]
+   return draggableElements.reduce((closest, child)=>{
+        const box = child.getBoundingClientRect() 
+        const offset = y - box.top - box.height / 2 
+         if(offset < 0 && offset > closest.offset){
+             return { offset:offset, element: child }
+         } else{
+            return closest
+         }
+
+    }, {offset: Number.NEGATIVE_INFINITY}).element
 }
 window.onload = () => WriteTodos1(), WriteTodos2(), WriteTodos3()
