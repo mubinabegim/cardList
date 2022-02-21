@@ -64,12 +64,12 @@
    color: white;
  }
 
- .card-body ul {
+ ul {
    list-style: none;
    border-bottom: 1px solid #0a407a52;
   }
   
-  .card-body ul li{
+  ul li{
     border: 1px solid #467cb652;
     border-radius: .3rem;
     /* border-bottom: none; */
@@ -80,15 +80,15 @@
     align-items: center;
     cursor: pointer;
   }
-  .card-body ul li:hover{
+  ul li:hover{
     background-color:#295e9752;
   }
-  .card-body ul li span i:last-child {
+  ul li span i:last-child {
     color: crimson;
    margin-left: .3rem;
  }
 
- .card-body ul li span i:nth-child(1) {
+ ul li span i:nth-child(1) {
    color: #0a417ace;
  }
  .dragging{

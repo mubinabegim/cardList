@@ -23,7 +23,7 @@ const form1 = document.querySelector("#form1"),
 const WriteTodos1 = () => {
     uls[0].innerHTML = "";
     todos.map((todo, index) => {
-        uls[0].innerHTML += `<li class="draggable" draggable="true">
+        uls[0].innerHTML += `<li class="draggable" id="drag1" ondragstart="drag(event)" draggable="true">
         <span>${index + 1}. ${todo.title}</span>
         <span style="display:flex;">
             <i onclick="EditToDo1(${todo.id})" class="btn bi bi-pencil-square"></i>
@@ -37,7 +37,7 @@ const WriteTodos1 = () => {
 const WriteTodos2 = () => {
     uls[1].innerHTML = "";
     todos2.map((todo, index) => {
-        uls[1].innerHTML += `<li class="draggable" draggable="true">
+        uls[1].innerHTML += `<li class="draggable" id="drag2" ondragstart="drag(event)" draggable="true">
         <span>${index + 1}. ${todo.title}</span>
         <span style="display:flex;">
             <i onclick="EditToDo2(${todo.id})" class="btn bi bi-pencil-square"></i>
@@ -51,7 +51,7 @@ const WriteTodos3 = () => {
 
     uls[2].innerHTML = "";
     todos3.map((todo, index) => {
-        uls[2].innerHTML += `<li class="draggable" draggable="true">
+        uls[2].innerHTML += `<li class="draggable" id="drag3" ondragstart="drag(event)" draggable="true">
         <span>${index + 1}. ${todo.title}</span>
         <span style="display:flex;">
             <i onclick="EditToDo3(${todo.id})" class="btn bi bi-pencil-square"></i>
@@ -226,39 +226,52 @@ const EditToDo3 = (id) => {
     })
 }
 // Drag and drop
-draggables.forEach(draggable =>{
-    draggable.addEventListener("dragstart", () => {
-        // console.log('drag start')
-        draggable.classList.add("dragging")
-    })
-    draggable.addEventListener("dragend", ()=>{
-        draggable.classList.remove("dragging")
-    })
-})
-uls.forEach(ul=>{
-    ul.addEventListener("dragover", e => {
-        e.preventDefault()
-        const afterElement = getDragAfterElement(ul, e.clientY)
-        // console.log("drag over")
-        const draggable = document.querySelector(".dragging");
-        if(afterElement === null){
-            ul.appendChild(draggables)
-    }else{
-        ul.insertBefore(draggable, afterElement)
-    }
-    })
-})
-const getDragAfterElement = (ul, y) =>{
-    const draggableElements = [...ul.querySelectorAll(".draggable:not(.dragging)")]
-   return draggableElements.reduce((closest, child)=>{
-        const box = child.getBoundingClientRect() 
-        const offset = y - box.top - box.height / 2 
-         if(offset < 0 && offset > closest.offset){
-             return { offset:offset, element: child }
-         } else{
-            return closest
-         }
+// draggables.forEach(draggable =>{
+//     draggable.addEventListener("dragstart", () => {
+//         // console.log('drag start')
+//         draggable.classList.add("dragging")
+//     })
+//     draggable.addEventListener("dragend", ()=>{
+//         draggable.classList.remove("dragging")
+//     })
+// })
+// uls.forEach(ul=>{
+//     ul.addEventListener("dragover", e => {
+//         e.preventDefault()
+//         const afterElement = getDragAfterElement(ul, e.clientY)
+//         // console.log("drag over")
+//         const draggable = document.querySelector(".dragging");
+//         if(afterElement === null){
+//             ul.appendChild(draggable)
+//     }else{
+//         ul.insertBefore(draggable, afterElement)
+//     }
+//     })
+// })
+// const getDragAfterElement = (ul, y) =>{
+//     const draggableElements = [...ul.querySelectorAll(".draggable:not(.dragging)")]
+//    return draggableElements.reduce((closest, child)=>{
+//         const box = child.getBoundingClientRect() 
+//         const offset = y - box.top - box.height / 2 
+//          if(offset < 0 && offset > closest.offset){
+//              return { offset:offset, element: child }
+//          } else{
+//             return closest
+//          }
 
-    }, {offset: Number.NEGATIVE_INFINITY}).element
-}
+//     }, {offset: Number.NEGATIVE_INFINITY}).element
+// }
+function allowDrop(ev) {
+    ev.preventDefault();
+  }
+  
+  function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+  }
+  
+  function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(data));
+  }
 window.onload = () => WriteTodos1(), WriteTodos2(), WriteTodos3()
