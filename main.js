@@ -26,6 +26,9 @@ const unOrderedLists3 = document.getElementById("ul3");
 
 // Create list
 const CreateLists = () => {
+    localStorage.setItem('unOrderedLists1', JSON.stringify(unOrderedLists1))
+    const ul1 = localStorage.getItem("unOrderedLists1", JSON.stringify(unOrderedLists1))
+    const ulCard1 = JSON.parse(ul1)
     ulCard1.innerHTML = "";
     
     listsInfo.map((todo, index) => {
@@ -37,9 +40,7 @@ const CreateLists = () => {
         </span>
     </li>`
     })
-    localStorage.setItem('unOrderedLists1', JSON.stringify(unOrderedLists1))
-    const ul1 = localStorage.getItem("unOrderedLists1", JSON.stringify(unOrderedLists1))
-    const ulCard1 = JSON.parse(ul1)
+    
 }
 
 // createToDoingList
@@ -101,6 +102,7 @@ formOfLists.onsubmit = (e) => {
 
     } else alert("Fill the gaps")
     localStorage.setItem("newToDo", JSON.stringify(newToDo))
+    localStorage.getItem("newToDo", JSON.parse(newToDo))
 };
 // create via formOfDoingList
 formOfDoingList.onsubmit = (e) => {
