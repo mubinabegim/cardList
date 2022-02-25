@@ -10,6 +10,8 @@
   
   body {
   background-image: linear-gradient(rgba(0, 0, 0, 0.219), rgba(0, 0, 0, 0.219)), url('./assets/images/todosBg.jpg');
+  /* width: 100vw; */
+  height: 100vh;
   background-size: cover;
   background-repeat: no-repeat;
 }
