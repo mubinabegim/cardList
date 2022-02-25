@@ -1,29 +1,35 @@
-let todos = [
+let lists = [
     { id: 1, title: "Create a button" },
     { id: 2, title: "Create a edit button" },
     { id: 3, title: "Create a delete button" },
     { id: 4, title: "Create a add button" }];
-let whichEl = null,
-    isEdit = false;
-let todos2 = [],
-    todos3 = [];
-// constants
-const form1 = document.querySelector("#form1"),
-    form2 = document.querySelector("#form2"),
-    form3 = document.querySelector("#form3"),
-    
-    inputs = document.querySelectorAll("input"),
-    spans = document.querySelectorAll(".spanBtn"),
-    buttons = document.querySelectorAll("button"),
-    draggables = document.querySelectorAll(".draggable"),
-    cardBodys = document.querySelectorAll(".card-body"),
-    uls = document.querySelectorAll("ul");
+    // ----- Local storage for lists ------
+localStorage.setItem('lists', JSON.stringify(lists))
+const localData = localStorage.getItem('lists')
+const listsInfo = JSON.parse(localData)
+let selectedItem = null,
+isEditMode = false;
+let doingList = [],
+doneList = [];
+// ------ constants  -------
+const formOfLists = document.querySelector("#form1"),
+formOfDoingList = document.querySelector("#form2"),
+formOfDoneList = document.querySelector("#form3"),
+inputs = document.querySelectorAll("input"),
+spans = document.querySelectorAll(".spanBtn"),
+buttons = document.querySelectorAll("button"),
+draggables = document.querySelectorAll(".draggable"),
+cardBodys = document.querySelectorAll(".card-body"),
+unOrderedLists1 = document.querySelector("#ul1");
+const unOrderedLists2 = document.getElementById("ul2");
+const unOrderedLists3 = document.getElementById("ul3");
 
-// writeToDos1
-const WriteTodos1 = () => {
-    uls[0].innerHTML = "";
-    todos.map((todo, index) => {
-        uls[0].innerHTML += `<li class="draggable" id="drag1" ondragstart="drag(event)" draggable="true">
+// Create list
+const CreateLists = () => {
+    ulCard1.innerHTML = "";
+    
+    listsInfo.map((todo, index) => {
+        ulCard1.innerHTML += `<li class="draggable" id="drag1" ondragstart="drag(event)" draggable="true">
         <span>${index + 1}. ${todo.title}</span>
         <span style="display:flex;">
             <i onclick="EditToDo1(${todo.id})" class="btn bi bi-pencil-square"></i>
@@ -31,13 +37,16 @@ const WriteTodos1 = () => {
         </span>
     </li>`
     })
+    localStorage.setItem('unOrderedLists1', JSON.stringify(unOrderedLists1))
+    const ul1 = localStorage.getItem("unOrderedLists1", JSON.stringify(unOrderedLists1))
+    const ulCard1 = JSON.parse(ul1)
 }
 
-// WriteTodos2
-const WriteTodos2 = () => {
-    uls[1].innerHTML = "";
-    todos2.map((todo, index) => {
-        uls[1].innerHTML += `<li class="draggable" id="drag2" ondragstart="drag(event)" draggable="true">
+// createToDoingList
+const createToDoingList = () => {
+    unOrderedLists2.innerHTML = "";
+    doingList.map((todo, index) => {
+        unOrderedLists2.innerHTML += `<li class="draggable" id="drag2" ondragstart="drag(event)" draggable="true">
         <span>${index + 1}. ${todo.title}</span>
         <span style="display:flex;">
             <i onclick="EditToDo2(${todo.id})" class="btn bi bi-pencil-square"></i>
@@ -46,12 +55,12 @@ const WriteTodos2 = () => {
     </li>`
     })
 }
-// WriteTodos3
-const WriteTodos3 = () => {
+// createToDoneList
+const createToDoneList = () => {
 
-    uls[2].innerHTML = "";
-    todos3.map((todo, index) => {
-        uls[2].innerHTML += `<li class="draggable" id="drag3" ondragstart="drag(event)" draggable="true">
+    unOrderedLists3.innerHTML = "";
+    doneList.map((todo, index) => {
+        unOrderedLists3.innerHTML += `<li class="draggable" id="drag3" ondragstart="drag(event)" draggable="true">
         <span>${index + 1}. ${todo.title}</span>
         <span style="display:flex;">
             <i onclick="EditToDo3(${todo.id})" class="btn bi bi-pencil-square"></i>
@@ -60,29 +69,29 @@ const WriteTodos3 = () => {
     </li>`
     })
 }
-// create via form1
-form1.onsubmit = (e) => {
+// create via formOflists
+formOfLists.onsubmit = (e) => {
     e.preventDefault();
     let newToDo = {
         id: Date.now(),
         title: e.target[0].value
     };
     if (newToDo.title !== "") {
-        if (!isEdit) {
-            todos = [...todos, newToDo];
-            form1.reset();
-            WriteTodos1();
+        if (!isEditMode) {
+            lists = [...lists, newToDo];
+            formOfLists.reset();
+            CreateLists();
         } else {
-            todos = todos.map(todo => {
-                if (todo.id === whichEl) {
+            lists = lists.map(todo => {
+                if (todo.id === selectedItem) {
                     todo.title = newToDo.title;
                 };
                 return todo;
             });
-            WriteTodos1();
-            form1.reset();
-            isEdit = false;
-            whichEl = null;
+            CreateLists();
+            formOfLists.reset();
+            isEditMode = false;
+            selectedItem = null;
             inputs[0].style.color="black";
             inputs[0].style.fontWeight="normal";
             buttons[0].innerHTML = `
@@ -90,31 +99,32 @@ form1.onsubmit = (e) => {
                 <span> Create</span>`
         };
 
-    } else alert("Fill  the gaps")
+    } else alert("Fill the gaps")
+    localStorage.setItem("newToDo", JSON.stringify(newToDo))
 };
-// create via form2
-form2.onsubmit = (e) => {
+// create via formOfDoingList
+formOfDoingList.onsubmit = (e) => {
     e.preventDefault();
     let newToDo = {
         id: Date.now(),
         title: e.target[0].value,
     };
     if (newToDo.title !== "") {
-        if (!isEdit) {
-            todos2 = [...todos2, newToDo];
-            form2.reset();
-            WriteTodos2();
+        if (!isEditMode) {
+            doingList = [...doingList, newToDo];
+            formOfDoingList.reset();
+           createToDoingList();
         } else {
-            todos2 = todos2.map(todo => {
-                if (todo.id === whichEl) {
+           doingList =doingList.map(todo => {
+                if (todo.id === selectedItem) {
                     todo.title = newToDo.title;
                 };
                 return todo;
             });
-            WriteTodos2();
-            form2.reset();
-            isEdit = false;
-            whichEl = null;
+           createToDoingList();
+            formOfDoingList.reset();
+            isEditMode = false;
+            selectedItem = null;
             inputs[1].style.color="black";
             inputs[1].style.fontWeight="normal";
             buttons[1].innerHTML = `
@@ -125,29 +135,29 @@ form2.onsubmit = (e) => {
     } else alert("Fill  the gaps")
 }
 
-// create via form3
-form3.onsubmit = (e) => {
+// create via formOfDoneList
+formOfDoneList.onsubmit = (e) => {
     e.preventDefault();
     let newToDo = {
         id: Date.now(),
         title: e.target[0].value
     };
     if (newToDo.title !== "") {
-        if (!isEdit) {
-            todos3 = [...todos3, newToDo];
-            form3.reset();
-            WriteTodos3();
+        if (!isEditMode) {
+           doneList = [...doneList, newToDo];
+            formOfDoneList.reset();
+            createToDoneList();
         } else {
-            todos2 = todos2.map(todo => {
-                if (todo.id === whichEl) {
+            doneList = doneList.map(todo => {
+                if (todo.id === selectedItem) {
                     todo.title = newToDo.title;
                 };
                 return todo;
             });
-            WriteTodos3();
-            form3.reset();
-            isEdit = false;
-            whichEl = null;
+            createToDoneList();
+            formOfDoneList.reset();
+            isEditMode = false;
+            selectedItem = null;
             inputs[2].style.color="black";
             inputs[2].style.fontWeight="normal"
             buttons[2].innerHTML = `
@@ -160,36 +170,36 @@ form3.onsubmit = (e) => {
 const DeleteToDo1 = (id) => {
     let confirmation = window.confirm("Are you sure to delete this item?");
     if (confirmation) {
-        todos = todos.filter(user => user.id !== id);
-        WriteTodos1();
+        lists = lists.filter(user => user.id !== id);
+        CreateLists();
     }
 }
 
 const DeleteToDo2 = (id) => {
     let confirmation = window.confirm("Are you sure to delete this item?");
     if (confirmation) {
-        todos2 = todos2.filter(user => user.id !== id);
-        WriteTodos2();
+        doingList = doingList.filter(user => user.id !== id);
+       createToDoingList();
     }
 }
 
 const DeleteToDo3 = (id) => {
     let confirmation = window.confirm("Are you sure to delete this item?");
     if (confirmation) {
-        todos3 = todos3.filter(user => user.id !== id);
-        WriteTodos3();
+        doneList = doneList.filter(user => user.id !== id);
+        createToDoneList();
     }
 }
 
 const EditToDo1 = (id) => {
-    isEdit = true;
-    whichEl = id;
+    isEditMode = true;
+    selectedItem = id;
     inputs[0].style.color="crimson";
     inputs[0].style.fontWeight="bold";
     buttons[0].innerHTML = `
     <i class="bi bi-pencil"></i>
     <span> Edit</span>`
-    todos.map(todo => {
+    lists.map(todo => {
         if (todo.id === id) {
             inputs[0].value = todo.title;
         }
@@ -198,28 +208,28 @@ const EditToDo1 = (id) => {
 
 
 const EditToDo2 = (id) => {
-    isEdit = true;
-    whichEl = id;
+    isEditMode = true;
+    selectedItem = id;
     inputs[1].style.color="crimson";
     inputs[1].style.fontWeight="bold";
     buttons[1].innerHTML = `
     <i class="bi bi-pencil"></i>
     <span> Edit</span>`
-    todos2.map(todo => {
+    doingList.map(todo => {
         if (todo.id === id) {
             inputs[1].value = todo.title;
         }
     })
 }
 const EditToDo3 = (id) => {
-    isEdit = true;
-    whichEl = id;
+    isEditMode = true;
+    selectedItem = id;
     inputs[2].style.color="crimson";
     inputs[2].style.fontWeight="bold"
     buttons[2].innerHTML = `
     <i class="bi bi-pencil"></i>
     <span> Edit</span>`
-    todos3.map(todo => {
+    doneList.map(todo => {
         if (todo.id === id) {
             inputs[2].value = todo.title;
         }
@@ -235,7 +245,7 @@ const EditToDo3 = (id) => {
 //         draggable.classList.remove("dragging")
 //     })
 // })
-// uls.forEach(ul=>{
+// unOrderedLists.forEach(ul=>{
 //     ul.addEventListener("dragover", e => {
 //         e.preventDefault()
 //         const afterElement = getDragAfterElement(ul, e.clientY)
@@ -274,4 +284,4 @@ function allowDrop(ev) {
     var data = ev.dataTransfer.getData("text");
     ev.target.appendChild(document.getElementById(data));
   }
-window.onload = () => WriteTodos1(), WriteTodos2(), WriteTodos3()
+window.onload = () => CreateLists(),createToDoingList(), createToDoneList()
